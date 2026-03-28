@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INTERATIVIDADE — Anos 2000s</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=VT323&family=Oswald:wght@400;700&display=swap');
+
+/* ── LIGHT THEME — Frutiger Aero ── */
+:root {
+  --bg:#c8eeff;--bg2:rgba(255,255,255,0.72);--bg3:rgba(180,230,255,0.5);
+  --text:#003a5c;--text2:#2a6080;--border:rgba(0,140,210,0.35);
+  --pink:#0099cc;--pink2:#4dd8f8;--purple:#007ab8;--accent:#00b4d8;
+  --shadow:0 4px 18px rgba(0,140,210,0.18);--input-bg:rgba(255,255,255,0.6);--muted:#5a9ab8;
+  --mq-bg:linear-gradient(90deg,#0099cc,#00b4d8);--mq-text:#fff;
+  --card-after:transparent;
+  --body-bg:radial-gradient(ellipse at 20% 40%,rgba(120,210,255,0.5) 0%,transparent 55%),radial-gradient(ellipse at 80% 10%,rgba(160,240,180,0.3) 0%,transparent 50%),linear-gradient(160deg,#b8e8ff 0%,#d4f5d4 45%,#a8d8ff 100%);
+}
+/* ── DARK THEME — azul escuro ── */
+[data-theme="dark"]{
+  --bg:#050d1a;--bg2:rgba(10,25,50,0.85);--bg3:rgba(0,60,120,0.4);
+  --text:#c8e8ff;--text2:#7ab0d8;--border:rgba(0,120,200,0.5);
+  --pink:#00b4d8;--pink2:#4dd8f8;--purple:#0077b6;--accent:#0096c7;
+  --shadow:0 4px 18px rgba(0,80,160,0.4);--input-bg:rgba(0,20,50,0.6);--muted:#4a80a8;
+  --mq-bg:linear-gradient(90deg,#023e8a,#0096c7);--mq-text:#c8e8ff;
+  --card-after:transparent;
+  --body-bg:radial-gradient(ellipse at 20% 30%,rgba(0,80,160,0.5) 0%,transparent 55%),radial-gradient(ellipse at 80% 70%,rgba(0,50,120,0.4) 0%,transparent 50%),linear-gradient(160deg,#050d1a 0%,#071428 50%,#060f20 100%);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;transition:background .3s,color .3s,border-color .3s;}
+body{background:var(--body-bg);background-attachment:fixed;color:var(--text);font-family:'Oswald',sans-serif;overflow-x:hidden;}
+
+/* ── BUBBLES (light only) ── */
+.bubble{position:fixed;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.75),rgba(255,255,255,0.05));border:1px solid rgba(255,255,255,0.55);animation:floatup linear infinite;}
+@keyframes floatup{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.8}90%{opacity:.4}100%{transform:translateY(-120px) scale(1);opacity:0}}
+[data-theme="dark"] .bubble{display:none;}
+
+/* ── MARQUEE ── */
+.marquee-bar{background:var(--mq-bg);color:var(--mq-text);padding:7px 0;font-family:'VT323',monospace;font-size:18px;letter-spacing:3px;overflow:hidden;white-space:nowrap;border-bottom:2px solid var(--border);}
+.marquee-inner{display:inline-block;animation:mq 24s linear infinite;}
+@keyframes mq{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+
+/* ── THEME BTN ── */
+.theme-btn{position:fixed;top:12px;right:12px;z-index:999;background:var(--pink);color:#fff;border:none;border-radius:50px;padding:7px 16px;font-family:'Bangers',cursive;font-size:17px;letter-spacing:2px;cursor:pointer;box-shadow:0 4px 14px rgba(0,150,220,0.35);white-space:nowrap;position:relative;overflow:hidden;}
+.theme-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:rgba(255,255,255,0.3);border-radius:50px 50px 0 0;pointer-events:none;}
+.theme-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,150,220,0.4);}
+[data-theme="dark"] .theme-btn{border-radius:50px;border:none;box-shadow:0 4px 14px rgba(0,100,200,0.35);}
+[data-theme="dark"] .theme-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,100,200,0.4);}
+
+/* ── HEADER ── */
+.header{background:var(--bg2);border-bottom:3px solid var(--border);padding:12px 0 8px;text-align:center;}
+[data-theme="light"] .header{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 4px 20px rgba(0,140,210,0.1);}
+.header-meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;max-width:920px;margin:0 auto 6px;padding:0 20px 6px;font-size:12px;color:var(--text2);border-bottom:1px solid var(--border);font-family:'VT323',monospace;letter-spacing:2px;}
+/* ── SPARKLES ── */
+.sparkle{position:fixed;pointer-events:none;font-size:16px;animation:sparkle-float linear infinite;opacity:0;}
+@keyframes sparkle-float{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:1}80%{opacity:.7}100%{transform:translateY(-80px) rotate(360deg);opacity:0}}
+
+.masthead{
+  font-family:'Bangers',cursive;
+  font-size:clamp(40px,10vw,104px);
+  letter-spacing:clamp(2px,2vw,8px);
+  color:var(--text);
+  line-height:1;
+  text-shadow:4px 4px 0 var(--pink),8px 8px 0 var(--accent);
+  padding:0 10px;
+  animation:shimmer-text 3s ease-in-out infinite alternate;
+}
+@keyframes shimmer-text{
+  from{text-shadow:4px 4px 0 var(--pink),8px 8px 0 var(--accent),0 0 30px rgba(0,180,220,0.3);}
+  to{text-shadow:4px 4px 0 var(--accent),8px 8px 0 var(--pink),0 0 60px rgba(0,180,220,0.6);}
+}
+
+.header-edition{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;max-width:920px;margin:6px auto 0;padding:5px 20px 0;font-size:12px;border-top:3px double var(--border);font-family:'VT323',monospace;letter-spacing:2px;color:var(--text2);}
+
+/* ── Y2K BANNER ── */
+.y2k-banner{
+  background:linear-gradient(135deg,#0077b6,#00b4d8,#4dd8f8,#0096c7);
+  background-size:400% 400%;animation:gs 5s ease infinite;
+  text-align:center;padding:22px 10px;
+  border-top:4px solid rgba(255,255,255,0.4);
+  border-bottom:4px solid rgba(255,255,255,0.4);
+  position:relative;overflow:hidden;
+}
+[data-theme="dark"] .y2k-banner{background:linear-gradient(135deg,#023e8a,#0096c7,#00b4d8,#0077b6);background-size:400% 400%;}
+
+/* glitter overlay */
+.y2k-banner::before{
+  content:'✦ ★ ✦ ✧ ★ ✦ ✧ ★ ✦ ✧ ★ ✦ ✧ ★ ✦';
+  position:absolute;left:0;right:0;top:3px;
+  font-size:12px;color:rgba(255,255,255,.6);letter-spacing:5px;
+  animation:glitter-row 1.5s ease-in-out infinite alternate;
+}
+.y2k-banner::after{
+  content:'✧ ★ ✦ ✧ ★ ✦ ✧ ★ ✦ ✧ ★ ✦ ✧ ★ ✧';
+  position:absolute;left:0;right:0;bottom:3px;
+  font-size:12px;color:rgba(255,255,255,.6);letter-spacing:5px;
+  animation:glitter-row 1.5s ease-in-out infinite alternate-reverse;
+}
+@keyframes glitter-row{from{opacity:.4;letter-spacing:5px}to{opacity:1;letter-spacing:6px}}
+@keyframes gs{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+.y2k-title{
+  font-family:'Bangers',cursive;
+  font-size:clamp(48px,13vw,120px);
+  color:#fff;
+  letter-spacing:clamp(4px,3vw,10px);
+  animation:glow 2s ease-in-out infinite alternate;
+  line-height:1;
+  /* chrome/metallic effect */
+  -webkit-text-stroke:2px rgba(255,255,255,0.3);
+}
+@keyframes glow{from{text-shadow:0 0 10px #fff,4px 4px 0 #023e8a,0 0 40px #00b4d8,0 0 80px rgba(0,180,255,0.3);}to{text-shadow:0 0 20px #fff,4px 4px 0 #012060,0 0 80px #4dd8f8,0 0 120px rgba(0,200,255,0.5);}}
+[data-theme="dark"] .y2k-title{animation:glowblue 2s ease-in-out infinite alternate;}
+@keyframes glowblue{from{text-shadow:0 0 10px #fff,4px 4px 0 #023e8a,0 0 40px #00b4d8;}to{text-shadow:0 0 20px #fff,4px 4px 0 #012060,0 0 80px #4dd8f8;}}
+.y2k-sub{font-family:'VT323',monospace;font-size:clamp(14px,3vw,20px);color:rgba(255,255,255,.9);letter-spacing:4px;margin-top:6px;animation:blink 1s step-end infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* ── MAIN GRID ── */
+.main{max-width:960px;margin:0 auto;padding:20px 16px 40px;display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+.full{grid-column:1/-1;}
+
+/* ── CARD — Y2K glass ── */
+.card{
+  background:var(--bg2);
+  border:1.5px solid var(--border);
+  padding:18px;
+  position:relative;
+  border-radius:12px;
+  backdrop-filter:blur(14px) saturate(1.3);
+  -webkit-backdrop-filter:blur(14px) saturate(1.3);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,0.5),inset 0 -1px 0 rgba(0,100,180,0.1);
+  overflow:hidden;
+}
+/* glossy top stripe on card */
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:40%;
+  background:linear-gradient(180deg,rgba(255,255,255,0.25),transparent);
+  border-radius:12px 12px 0 0;
+  pointer-events:none;
+}
+[data-theme="dark"] .card::after{display:none;}
+[data-theme="dark"] .card{box-shadow:var(--shadow),inset 0 1px 0 rgba(100,200,255,0.15);}
+
+/* ── SECTION TITLE — Y2K style ── */
+.sec-title{
+  font-family:'Bangers',cursive;
+  font-size:clamp(20px,4vw,26px);
+  letter-spacing:3px;
+  color:var(--pink);
+  border-bottom:2px solid var(--border);
+  padding-bottom:8px;
+  margin-bottom:14px;
+  text-align:center;
+  position:relative;
+  text-shadow:1px 1px 0 var(--accent),0 0 20px rgba(0,180,220,0.3);
+}
+/* star decorations on section titles */
+.sec-title::before{content:'★ ';font-size:.8em;opacity:.6;}
+.sec-title::after{content:' ★';font-size:.8em;opacity:.6;}
+
+/* ── INTRO ── */
+.intro-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.intro-p{font-size:14px;line-height:1.75;color:var(--text2);font-family:Georgia,serif;text-align:justify;}
+.intro-p::first-letter{font-family:'Bangers',cursive;font-size:52px;float:left;line-height:.9;margin-right:6px;color:var(--pink);text-shadow:2px 2px 0 var(--accent);}
+
+/* ── CAÇA PALAVRAS ── */
+.ws-wrap{display:flex;flex-direction:column;align-items:center;width:100%;}
+.word-grid{display:grid;grid-template-columns:repeat(18,1fr);gap:2px;font-family:'VT323',monospace;width:100%;max-width:540px;}
+.cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:3px;user-select:none;color:var(--text);text-transform:uppercase;font-size:clamp(11px,1.8vw,19px);transition:all .1s;}
+.cell:hover{background:var(--bg3);transform:scale(1.1);}
+.cell.selected{background:var(--pink2);color:#fff;transform:scale(1.05);box-shadow:0 0 6px rgba(0,180,220,0.5);}
+.cell.found{background:var(--purple);color:#fff;box-shadow:0 0 8px rgba(0,120,200,0.4);}
+.words-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;justify-content:center;}
+.word-tag{
+  background:var(--input-bg);
+  border:1.5px solid var(--border);
+  padding:3px 12px;
+  font-family:'VT323',monospace;
+  font-size:16px;font-weight:700;letter-spacing:1px;
+  color:var(--text);
+  border-radius:50px;
+  transition:all .2s;
+}
+.word-tag:hover{transform:scale(1.05);}
+.word-tag.found-word{background:var(--purple);color:#fff;text-decoration:line-through;box-shadow:0 0 8px rgba(0,120,200,0.3);}
+.wp-win{display:none;text-align:center;margin-top:12px;padding:12px 16px;background:linear-gradient(135deg,var(--pink),var(--accent));color:#fff;font-family:'Bangers',cursive;font-size:clamp(18px,4vw,28px);letter-spacing:3px;border-radius:50px;box-shadow:0 4px 20px rgba(0,150,220,0.4);}
+.wp-win.show{display:block;animation:pulse .6s ease infinite alternate;}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.03)}}
+
+/* ── QUIZ ── */
+.quiz-q{margin-bottom:18px;padding-bottom:14px;border-bottom:1px dashed var(--muted);}
+.quiz-q:last-child{border-bottom:none;margin-bottom:0;}
+.quiz-question{font-size:14px;font-weight:700;margin-bottom:10px;color:var(--text);}
+.quiz-question .num{color:var(--pink);font-family:'Bangers',cursive;font-size:20px;}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.quiz-btn{background:var(--input-bg);border:2px solid var(--border);padding:8px 10px;font-family:'Oswald',sans-serif;font-size:13px;cursor:pointer;text-align:left;transition:all .12s;color:var(--text);}
+.quiz-btn:hover{background:var(--bg3);transform:translate(-2px,-2px);box-shadow:var(--shadow);}
+.quiz-btn.correct{background:var(--purple);color:#fff;border-color:var(--purple);}
+.quiz-btn.wrong{background:#cc0000;color:#fff;border-color:#cc0000;}
+.quiz-btn.reveal{background:var(--purple);color:#fff;opacity:.5;}
+.submit-btn{display:block;width:100%;padding:12px;background:var(--pink);color:#fff;border:none;border-radius:50px;font-family:'Bangers',cursive;font-size:clamp(18px,4vw,24px);letter-spacing:3px;cursor:pointer;margin-top:16px;transition:all .12s;position:relative;overflow:hidden;box-shadow:0 4px 16px rgba(0,150,220,0.35);}
+.submit-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,0.35),transparent);border-radius:50px 50px 0 0;pointer-events:none;}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,150,220,0.45);}
+[data-theme="dark"] .submit-btn{border-radius:50px;border:none;box-shadow:0 4px 16px rgba(0,100,200,0.4);}
+[data-theme="dark"] .submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,100,200,0.5);}
+[data-theme="dark"] .bubble{display:block;}
+[data-theme="dark"] .quiz-btn{border-radius:8px;border:1px solid var(--border);}
+[data-theme="dark"] .mem-btn{border-radius:8px;border:1px solid var(--border);}
+[data-theme="dark"] footer{background:rgba(0,40,90,0.9);color:var(--pink2);}
+.quiz-result{display:none;text-align:center;padding:20px;background:linear-gradient(135deg,var(--pink2),var(--accent));color:#fff;margin-top:16px;border-radius:8px;}
+.quiz-result.show{display:block;}
+.quiz-result .score{font-family:'Bangers',cursive;font-size:clamp(48px,10vw,64px);display:block;}
+
+/* ── MEMORY ── */
+.mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
+.mem-card{aspect-ratio:1;cursor:pointer;perspective:600px;}
+.mem-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .4s;}
+.mem-card.flipped .mem-inner,.mem-card.matched .mem-inner{transform:rotateY(180deg);}
+.mem-front,.mem-back{position:absolute;inset:0;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;border:2px solid var(--border);border-radius:4px;}
+.mem-front{background:linear-gradient(135deg,var(--pink2),var(--purple));font-family:'Bangers',cursive;font-size:clamp(12px,2.5vw,20px);color:#fff;letter-spacing:1px;}
+.mem-back{background:var(--bg2);transform:rotateY(180deg);font-size:clamp(22px,4vw,38px);}
+.mem-card.matched .mem-back{background:var(--bg3);border-color:var(--pink);}
+.mem-stats{display:flex;justify-content:space-between;margin-top:10px;font-size:14px;font-weight:700;flex-wrap:wrap;gap:6px;}
+.mem-btn{display:block;width:100%;margin-top:10px;padding:8px;background:var(--input-bg);border:2px solid var(--border);font-family:'Oswald',sans-serif;font-size:14px;cursor:pointer;font-weight:700;color:var(--text);}
+.mem-btn:hover{background:var(--bg3);}
+
+/* ── PARTICIPANTES ── */
+.participants-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:4px;}
+.participant-card{background:var(--input-bg);border:2px solid var(--border);padding:12px 16px;text-align:center;min-width:140px;flex:1;}
+.participant-name{font-family:'Bangers',cursive;font-size:20px;letter-spacing:1px;color:var(--text);}
+.participant-role{font-family:'VT323',monospace;font-size:14px;color:var(--muted);margin-top:2px;letter-spacing:1px;}
+.participant-card.highlight{border-color:var(--pink);background:var(--bg3);}
+.participant-card.highlight .participant-name{color:var(--pink);}
+
+/* ── FOOTER ── */
+footer{background:var(--border);color:var(--bg);text-align:center;padding:16px;font-family:'VT323',monospace;font-size:clamp(14px,3vw,20px);letter-spacing:3px;}
+
+/* ── MOBILE ── */
+@media(max-width:640px){
+  .main{grid-template-columns:1fr;padding:14px 10px 30px;}
+  .full{grid-column:1;}
+  .intro-cols{grid-template-columns:1fr;}
+  .quiz-options{grid-template-columns:1fr;}
+  .card{padding:14px;}
+  .card::after{display:none;}
+  .theme-btn{top:8px;right:8px;font-size:14px;padding:5px 10px;}
+}
+</style>
+</head>
+<body>
+
+<div id="bubbles" aria-hidden="true"></div>
+
+<button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 Escuro</button>
+
+<div class="marquee-bar">
+  <span class="marquee-inner">★ MSN MESSENGER ★ ORKUT ★ MOTOROLA V3 ★ FOTOLOG ★ iPOD ★ LAN HOUSE ★ MP3 ★ BEYONCÉ ★ BLOG ★ GOOGLE ★ EMO ★ TAMAGOTCHI ★ NOKIA 3310 ★ COMUNIDADE ★ MSN MESSENGER ★ ORKUT ★</span>
+</div>
+
+<header class="header">
+  <div class="header-meta">
+    <span>ABRIL 2026</span>
+    <span>✦ JORNAL ESCOLAR ✦</span>
+    <span>2ª EDIÇÃO</span>
+  </div>
+  <div class="masthead">INTERATIVIDADE</div>
+  <div class="header-edition">
+    <span>📰 EDIÇÃO ESPECIAL</span>
+    <span>✦ ANOS 2000S ✦</span>
+  </div>
+</header>
+
+<div class="y2k-banner">
+  <div class="y2k-title">ANOS 2000S</div>
+  <div class="y2k-sub">[ CARREGANDO NOSTALGIA... 100% ]</div>
+</div>
+
+<main class="main">
+
+  <!-- INTRO -->
+  <div class="full card">
+    <div class="sec-title">⚡ A DÉCADA QUE MUDOU TUDO ⚡</div>
+    <div class="intro-cols">
+      <p class="intro-p">Falar dos anos 2000 é mergulhar em uma era de transição fascinante, onde o mundo analógico dava seu último adeus enquanto a vida digital começava a acelerar de forma frenética. Foi a década da estética Y2K, do surgimento das redes sociais e de uma cultura pop vibrante que ainda hoje dita tendências.</p>
+      <p class="intro-p">Recordar os anos 2000 é lembrar de um tempo em que a tecnologia nos fascinava sem nos sobrecarregar, e onde a identidade era construída em comunidades de nicho e murais de recados. Do Orkut ao MSN Messenger, cada clique era uma aventura única e inesquecível.</p>
+    </div>
+  </div>
+
+  <!-- CAÇA PALAVRAS -->
+  <div class="full card">
+    <div class="sec-title">🔎 CAÇA PALAVRAS — ANOS 2000s</div>
+    <div class="ws-wrap">
+      <div class="word-grid" id="wordGrid"></div>
+      <div class="words-list" id="wordsList"></div>
+      <div class="wp-win" id="wpWin">🎉 TODAS AS PALAVRAS ENCONTRADAS! 🎉</div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card">
+    <div class="sec-title">❓ QUIZ ANOS 2000s</div>
+    <div id="quizContainer"></div>
+    <button class="submit-btn" id="submitQuiz" onclick="checkQuiz()">VER RESULTADO ✦</button>
+    <div class="quiz-result" id="quizResult">
+      <span class="score" id="scoreText"></span>
+      <p id="scoreMsg"></p>
+    </div>
+  </div>
+
+  <!-- MEMORY -->
+  <div class="card">
+    <div class="sec-title">🃏 JOGO DA MEMÓRIA</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:8px;font-family:Georgia,serif">Encontre os pares dos ícones dos anos 2000! 🕹️</p>
+    <div class="mem-grid" id="memoryGrid"></div>
+    <div class="mem-stats">
+      <span>Tentativas: <strong id="attempts">0</strong></span>
+      <span>Pares: <strong id="pairs">0</strong>/8</span>
+    </div>
+    <button class="mem-btn" onclick="initMemory()">🔄 Reiniciar</button>
+  </div>
+
+  <!-- PARTICIPANTES -->
+  <div class="full card">
+    <div class="sec-title">👥 PARTICIPANTES</div>
+    <div class="participants-grid">
+      <div class="participant-card">
+        <div class="participant-name">Apolo Cesar</div>
+        <div class="participant-role">✦ Grupo</div>
+      </div>
+      <div class="participant-card">
+        <div class="participant-name">Evans Adonay</div>
+        <div class="participant-role">✦ Grupo</div>
+      </div>
+      <div class="participant-card">
+        <div class="participant-name">Pedro Henrique</div>
+        <div class="participant-role">✦ Grupo</div>
+      </div>
+      <div class="participant-card">
+        <div class="participant-name">Sarah Raquel</div>
+        <div class="participant-role">✦ Grupo</div>
+      </div>
+      <div class="participant-card highlight">
+        <div class="participant-name">Welen H.</div>
+        <div class="participant-role">🌐 Participante Indireto</div>
+        <div class="participant-role" style="color:var(--pink);margin-top:2px;">Responsável por hospedar o projeto na internet</div>
+        <div class="participant-role" style="margin-top:2px;">(Welenmd)</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>✦ INTERATIVIDADE — 2ª EDIÇÃO — ABRIL 2026 ✦ ANOS 2000S ✦</footer>
+
+<script>
+// BUBBLES + SPARKLES
+function makeBubbles(){
+  const wrap=document.getElementById('bubbles');
+  for(let i=0;i<10;i++){
+    const b=document.createElement('div');b.className='bubble';
+    const s=16+Math.random()*50;
+    b.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}vw;bottom:-80px;animation-duration:${10+Math.random()*14}s;animation-delay:${Math.random()*12}s;`;
+    wrap.appendChild(b);
+  }
+  const stars=['✦','★','✧','⭐','💫','✨'];
+  for(let i=0;i<16;i++){
+    const s=document.createElement('div');s.className='sparkle';
+    s.textContent=stars[Math.floor(Math.random()*stars.length)];
+    s.style.cssText=`left:${Math.random()*100}vw;bottom:-40px;animation-duration:${8+Math.random()*12}s;animation-delay:${Math.random()*14}s;font-size:${12+Math.random()*16}px;`;
+    wrap.appendChild(s);
+  }
+}
+makeBubbles();
+
+// THEME
+function toggleTheme(){
+  const h=document.documentElement,d=h.getAttribute('data-theme')==='dark';
+  h.setAttribute('data-theme',d?'light':'dark');
+  document.getElementById('themeBtn').textContent=d?'🌙 Escuro':'☀️ Claro';
+}
+
+// CAÇA PALAVRAS
+const WORDS=["MSN","ORKUT","FOTOLOG","IPOD","MOTOROLA","MP3","LANHOUSE","BEYONCE","COMUNIDADE","EMO","BLOG","GOOGLE"];
+const GR=12,GC=18;
+let grid=[],cellEls=[],selecting=false,startCell=null,selCells=[],foundCells=new Set(),foundWords=new Set();
+
+function buildWS(){
+  grid=Array.from({length:GR},()=>Array(GC).fill(''));
+  const dirs=[[0,1],[1,0],[1,1],[-1,1],[0,-1],[-1,0],[-1,-1],[1,-1]];
+  for(const word of WORDS){
+    let placed=false,t=0;
+    while(!placed&&t++<500){
+      const[dr,dc]=dirs[Math.floor(Math.random()*dirs.length)];
+      const r=Math.floor(Math.random()*GR),c=Math.floor(Math.random()*GC);
+      let ok=true;
+      for(let i=0;i<word.length;i++){
+        const nr=r+dr*i,nc=c+dc*i;
+        if(nr<0||nr>=GR||nc<0||nc>=GC){ok=false;break;}
+        if(grid[nr][nc]&&grid[nr][nc]!==word[i]){ok=false;break;}
+      }
+      if(ok){for(let i=0;i<word.length;i++)grid[r+dr*i][c+dc*i]=word[i];placed=true;}
+    }
+  }
+  const a='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for(let r=0;r<GR;r++)for(let c=0;c<GC;c++)if(!grid[r][c])grid[r][c]=a[Math.floor(Math.random()*26)];
+  const con=document.getElementById('wordGrid');con.innerHTML='';cellEls=[];
+  for(let r=0;r<GR;r++)for(let c=0;c<GC;c++){
+    const el=document.createElement('div');el.className='cell';el.textContent=grid[r][c];
+    el.dataset.r=r;el.dataset.c=c;
+    el.addEventListener('mousedown',e=>{e.preventDefault();ss(r,c);});
+    el.addEventListener('mouseover',()=>{if(selecting)ms(r,c);});
+    el.addEventListener('mouseup',()=>es());
+    el.addEventListener('touchstart',e=>{e.preventDefault();ss(r,c);},{passive:false});
+    el.addEventListener('touchmove',e=>{
+      e.preventDefault();
+      const t=e.touches[0],e2=document.elementFromPoint(t.clientX,t.clientY);
+      if(e2&&e2.dataset.r!=null)ms(+e2.dataset.r,+e2.dataset.c);
+    },{passive:false});
+    el.addEventListener('touchend',()=>es());
+    con.appendChild(el);cellEls.push(el);
+  }
+  document.addEventListener('mouseup',es);
+  const wl=document.getElementById('wordsList');wl.innerHTML='';
+  WORDS.forEach(w=>{const tag=document.createElement('span');tag.className='word-tag';tag.textContent=w;tag.id='w-'+w;wl.appendChild(tag);});
+  foundCells.clear();foundWords.clear();document.getElementById('wpWin').classList.remove('show');
+}
+
+function gc(r,c){return cellEls[r*GC+c];}
+function ss(r,c){selecting=true;startCell={r,c};selCells=[{r,c}];hl();}
+function ms(r,c){
+  if(!selecting)return;
+  const dr=r-startCell.r,dc=c-startCell.c,len=Math.max(Math.abs(dr),Math.abs(dc));
+  if(len===0){selCells=[{r:startCell.r,c:startCell.c}];hl();return;}
+  let sR=0,sC=0;
+  if(Math.abs(dr)>=Math.abs(dc)*.7)sR=dr>0?1:-1;
+  if(Math.abs(dc)>=Math.abs(dr)*.7)sC=dc>0?1:-1;
+  const cells=[];
+  for(let i=0;i<=len;i++){const nr=startCell.r+sR*i,nc=startCell.c+sC*i;if(nr>=0&&nr<GR&&nc>=0&&nc<GC)cells.push({r:nr,c:nc});}
+  selCells=cells;hl();
+}
+function es(){if(!selecting)return;selecting=false;chkW();selCells.forEach(({r,c})=>{if(!foundCells.has(r*GC+c))gc(r,c).classList.remove('selected');});selCells=[];}
+function hl(){cellEls.forEach((el,i)=>{if(!foundCells.has(i))el.classList.remove('selected');});selCells.forEach(({r,c})=>{if(!foundCells.has(r*GC+c))gc(r,c).classList.add('selected');});}
+function chkW(){
+  const w=selCells.map(({r,c})=>grid[r][c]).join(''),rv=w.split('').reverse().join('');
+  const m=WORDS.find(x=>x===w||x===rv);
+  if(m&&!foundWords.has(m)){
+    foundWords.add(m);
+    selCells.forEach(({r,c})=>{const i=r*GC+c;foundCells.add(i);gc(r,c).classList.remove('selected');gc(r,c).classList.add('found');});
+    const tag=document.getElementById('w-'+m);if(tag)tag.classList.add('found-word');
+    if(foundWords.size===WORDS.length)document.getElementById('wpWin').classList.add('show');
+  }
+}
+
+// QUIZ
+const Qs=[
+  {q:"Qual era a principal rede social dos anos 2000 no Brasil?",opts:["Facebook","Orkut","Twitter","Instagram"],a:1},
+  {q:"Qual celular era símbolo dos anos 2000 com o jogo da cobrinha?",opts:["iPhone","Motorola RAZR","Nokia 3310","Samsung Galaxy"],a:2},
+  {q:"Qual programa de mensagens era o mais popular?",opts:["WhatsApp","MSN Messenger","Telegram","Discord"],a:1},
+  {q:"O iPod era famoso por ser um:",opts:["Celular","Computador","Leitor de MP3","Console"],a:2},
+  {q:"Qual era o site de blog/foto mais famoso dos anos 2000?",opts:["WordPress","Fotolog","Medium","Tumblr"],a:1},
+];
+let qA=new Array(Qs.length).fill(null);
+function buildQuiz(){
+  const c=document.getElementById('quizContainer');c.innerHTML='';
+  Qs.forEach((q,qi)=>{
+    const d=document.createElement('div');d.className='quiz-q';
+    d.innerHTML=`<div class="quiz-question"><span class="num">${qi+1}.</span> ${q.q}</div>`;
+    const o=document.createElement('div');o.className='quiz-options';
+    q.opts.forEach((opt,oi)=>{
+      const b=document.createElement('button');b.className='quiz-btn';b.textContent=opt;b.id=`q${qi}o${oi}`;
+      b.onclick=()=>{
+        qA[qi]=oi;
+        Qs[qi].opts.forEach((_,i)=>{
+          const btn=document.getElementById(`q${qi}o${i}`);
+          btn.style.background=i===oi?'var(--pink)':'';
+          btn.style.color=i===oi?'#fff':'';
+          btn.style.borderColor=i===oi?'var(--pink)':'';
+        });
+      };
+      o.appendChild(b);
+    });
+    d.appendChild(o);c.appendChild(d);
+  });
+}
+function checkQuiz(){
+  let s=0;
+  Qs.forEach((q,qi)=>{
+    q.opts.forEach((_,oi)=>{
+      const b=document.getElementById(`q${qi}o${oi}`);b.disabled=true;
+      if(oi===q.a)b.classList.add('reveal');
+      if(qA[qi]===oi&&oi===q.a){b.classList.remove('reveal');b.classList.add('correct');s++;}
+      else if(qA[qi]===oi&&oi!==q.a)b.classList.add('wrong');
+    });
+  });
+  const msgs=["Você não viveu os 2000s... 💀","Tenta de novo! 📖","Razoável! Você lembra de algumas coisas 😅","Muito bom! Você curtiu os 2000s! 🎉","PERFEITO! Você É os anos 2000! 🏆✨"];
+  document.getElementById('scoreText').textContent=`${s}/${Qs.length}`;
+  document.getElementById('scoreMsg').textContent=msgs[Math.min(s,4)];
+  document.getElementById('quizResult').classList.add('show');
+  document.getElementById('submitQuiz').style.display='none';
+}
+
+// MEMORY
+const EM=['📱','💿','🎮','🎧','💾','🖥️','📷','🌐'];
+let fl=[],mp=0,at=0,cf=true,ma=[];
+function initMemory(){
+  const all=[...EM,...EM];
+  for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
+  ma=all;fl=[];mp=0;at=0;cf=true;
+  document.getElementById('attempts').textContent=0;
+  document.getElementById('pairs').textContent=0;
+  const g=document.getElementById('memoryGrid');g.innerHTML='';
+  all.forEach((e,i)=>{
+    const c=document.createElement('div');c.className='mem-card';
+    c.innerHTML=`<div class="mem-inner"><div class="mem-front">Y2K</div><div class="mem-back">${e}</div></div>`;
+    c.onclick=()=>flipCard(c,i);g.appendChild(c);
+  });
+}
+function flipCard(card,idx){
+  if(!cf||card.classList.contains('flipped')||card.classList.contains('matched'))return;
+  card.classList.add('flipped');fl.push({card,idx});
+  if(fl.length===2){
+    cf=false;at++;document.getElementById('attempts').textContent=at;
+    const[a,b]=fl;
+    if(ma[a.idx]===ma[b.idx]){
+      a.card.classList.add('matched');b.card.classList.add('matched');
+      mp++;document.getElementById('pairs').textContent=mp;
+      fl=[];cf=true;
+      if(mp===EM.length)setTimeout(()=>alert(`🎉 Parabéns! Completou em ${at} tentativas!`),300);
+    }else{
+      setTimeout(()=>{a.card.classList.remove('flipped');b.card.classList.remove('flipped');fl=[];cf=true;},900);
+    }
+  }
+}
+
+buildWS();buildQuiz();initMemory();
+</script>
+</body>
+</html>
